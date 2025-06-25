@@ -1,5 +1,5 @@
-export const dynamic = "force-dynamic";
 "use client";
+export const dynamic = "force-dynamic";
 import React, { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { MOCK_PRODUCTS } from '@/lib/mock-data'; // Reverted to MOCK_PRODUCTS
