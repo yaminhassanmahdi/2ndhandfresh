@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 "use client";
 import React, { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
