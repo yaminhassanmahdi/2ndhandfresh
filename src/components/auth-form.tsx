@@ -1,5 +1,5 @@
 "use client";
-export const dynamic = "force-dynamic";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter, useSearchParams } from "next/navigation"; 
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect, Suspense } from "react"; 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, AlertCircle, Mail, Phone, LogIn } from "lucide-react"; 
 import { Separator } from "./ui/separator";
@@ -41,7 +41,7 @@ type AuthFormProps = {
   mode: 'login' | 'register' | 'completeGoogleSignup';
 };
 
-export function AuthForm({ mode }: AuthFormProps) {
+function AuthFormContent({ mode }: AuthFormProps) {
   const { login, register, signInWithGoogle, completeGoogleSignInWithPhoneNumber, pendingGoogleUserEmail, clearPendingGoogleUser, currentUser } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -312,5 +312,13 @@ export function AuthForm({ mode }: AuthFormProps) {
         </>
       )}
     </Form>
+  );
+}
+
+export function AuthForm({ mode }: AuthFormProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthFormContent mode={mode} />
+    </Suspense>
   );
 }

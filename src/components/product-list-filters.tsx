@@ -1,8 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Category, SubCategory, CategoryAttributeType, CategoryAttributeValue, BusinessSettings } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -23,7 +21,7 @@ interface ProductListFiltersProps {
   onApplyFilters?: () => void; // Optional: callback for when filters are applied, e.g., to close mobile sheet
 }
 
-export function ProductListFilters({
+function ProductListFiltersContent({
   currentCategory,
   subCategoriesForCurrentCategory,
   attributeTypesForCurrentCategory,
@@ -228,5 +226,13 @@ export function ProductListFilters({
         <Button onClick={applyFilters} className="w-full">Apply Filters</Button>
       </div>
     </div>
+  );
+}
+
+export function ProductListFilters(props: ProductListFiltersProps) {
+  return (
+    <Suspense fallback={<div>Loading filters...</div>}>
+      <ProductListFiltersContent {...props} />
+    </Suspense>
   );
 }
