@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -8,13 +7,13 @@ import { cn } from '@/lib/utils';
 import { useCart } from '@/contexts/cart-context';
 import { useAuth } from '@/contexts/auth-context';
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { MobileCategorySheet } from './mobile-category-sheet';
 import useLocalStorage from '@/hooks/use-local-storage';
 import type { BusinessSettings, Currency } from '@/lib/types';
 import { BUSINESS_SETTINGS_STORAGE_KEY, DEFAULT_BUSINESS_SETTINGS } from '@/lib/constants';
 
-export function MobileBottomNav() {
+function MobileBottomNavContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { itemCount, getCartTotal } = useCart();
@@ -39,7 +38,6 @@ export function MobileBottomNav() {
     { code: 'BDT', symbol: '৳', name: 'Bangladeshi Taka' }; // Absolute fallback
 
   const currencySymbol = activeCurrency.symbol;
-
 
   React.useEffect(() => {
     setIsClient(true);
@@ -125,5 +123,13 @@ export function MobileBottomNav() {
       </div>
       <MobileCategorySheet isOpen={isCategorySheetOpen} onOpenChange={setIsCategorySheetOpen} />
     </>
+  );
+}
+
+export function MobileBottomNav() {
+  return (
+    <Suspense fallback={null}>
+      <MobileBottomNavContent />
+    </Suspense>
   );
 }
